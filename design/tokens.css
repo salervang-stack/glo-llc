@@ -1,0 +1,83 @@
+/* ═══════════════════════════════════════════════════════════════════════════════════════════════
+   G.L.O DESIGN TOKENS v0 (2026-07-15) — the single source every surface imports (HUD, artifacts,
+   store sites, ads). Iris: "the rule stops being something we remember and becomes something the
+   token file enforces." Doctrine encoded: luminance = importance · red is ALARM-ONLY · every ink
+   pairs with its named surface at ≥ its floor (pairs validated by scripts/test-design-tokens.mjs —
+   Ava's pressure-test lives there as math, not prose).
+   Usage: <link rel="stylesheet" href="/design/tokens.css"> or @import; then use ONLY var(--g-*).
+   ═══════════════════════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Type: self-hosted variable fonts (CSP-safe — no CDN at render time) ── */
+@font-face { font-family: 'Sora'; src: url('fonts/sora-var.woff2') format('woff2'); font-weight: 400 800; font-display: swap; }
+@font-face { font-family: 'InterVar'; src: url('fonts/inter-var.woff2') format('woff2'); font-weight: 400 700; font-display: swap; }
+
+:root {
+  /* ── Font roles ── */
+  --g-font-display: 'Sora', ui-sans-serif, system-ui, sans-serif;        /* headlines, heroes, numbers that matter */
+  --g-font-body: 'InterVar', ui-sans-serif, system-ui, sans-serif;       /* everything readable */
+  --g-font-mono: ui-monospace, 'Cascadia Code', Consolas, monospace;     /* data, receipts, code */
+
+  /* ── Type scale (1.25 ratio, rem-based) ── */
+  --g-text-xs: 0.694rem;  --g-text-sm: 0.833rem;  --g-text-base: 1rem;
+  --g-text-lg: 1.25rem;   --g-text-xl: 1.563rem;  --g-text-2xl: 1.953rem;
+  --g-text-3xl: 2.441rem; --g-text-hero: 3.052rem;
+  --g-leading-tight: 1.2; --g-leading-body: 1.55;
+  --g-tracking-caps: 0.07em; /* uppercase labels always get tracking */
+
+  /* ── Spacing scale (4px base — the only gaps that exist) ── */
+  --g-s1: 4px; --g-s2: 8px; --g-s3: 12px; --g-s4: 16px; --g-s5: 24px;
+  --g-s6: 32px; --g-s7: 48px; --g-s8: 64px; --g-s9: 96px;
+
+  /* ── Radius + elevation ── */
+  --g-r-sm: 6px; --g-r-md: 10px; --g-r-lg: 14px; --g-r-pill: 999px;
+  --g-elev-1: 0 1px 2px rgba(0,0,0,.35);
+  --g-elev-2: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.28);
+  --g-elev-3: 0 2px 4px rgba(0,0,0,.45), 0 16px 48px rgba(0,0,0,.35);
+
+  /* ── Motion (the signature curves — ad-hoc easing is banned) ── */
+  --g-ease-enter: cubic-bezier(0.16, 1, 0.3, 1);     /* things arriving: fast in, soft settle */
+  --g-ease-exit: cubic-bezier(0.7, 0, 0.84, 0);      /* things leaving: accelerate away */
+  --g-ease-state: cubic-bezier(0.65, 0, 0.35, 1);    /* state changes: symmetric */
+  --g-dur-fast: 140ms; --g-dur-base: 220ms; --g-dur-slow: 420ms;
+
+  /* ── DARK surfaces (default) — luminance = importance: brighter ink is MORE important ── */
+  --g-bg: #0c1017;          /* the page */
+  --g-surface: #141b2a;     /* cards */
+  --g-surface-2: #182133;   /* raised/hover */
+  --g-line: #26324a;        /* borders */
+  --g-ink: #eef2f8;         /* primary text  — floor vs surface: ≥ 12:1 WCAG-ish, validated in test */
+  --g-ink-dim: #9fb0c6;     /* secondary     — floor ≥ 4.5:1 */
+  --g-ink-faint: #6d7e96;   /* captions/meta — floor ≥ 3:1, never for body copy */
+  --g-accent: #a3e635;      /* THE accent (lime) — one per surface, spent deliberately */
+  --g-accent-ink: #16210a;  /* text ON accent fills */
+  --g-info: #8ab4ff;
+  --g-good: #7ee787;        /* status only — never decoration */
+  --g-warn: #ffd166;
+  --g-alarm: #ff5a6a;       /* RED IS ALARM-ONLY (doctrine) — never a theme color */
+}
+
+/* ── LIGHT surfaces — same roles, re-derived (never naive inversion) ── */
+@media (prefers-color-scheme: light) {
+  :root {
+    --g-bg: #f4f6fb; --g-surface: #ffffff; --g-surface-2: #f7f9ff; --g-line: #dde3ef;
+    --g-ink: #16202f; --g-ink-dim: #48566b; --g-ink-faint: #75839a;
+    --g-accent: #4d7c0f; --g-accent-ink: #f7fee7;
+    --g-info: #2563eb; --g-good: #15803d; --g-warn: #a16207; --g-alarm: #dc2626;
+    --g-elev-1: 0 1px 2px rgba(20,30,50,.07);
+    --g-elev-2: 0 1px 2px rgba(20,30,50,.06), 0 8px 22px rgba(20,30,50,.09);
+    --g-elev-3: 0 2px 4px rgba(20,30,50,.08), 0 16px 44px rgba(20,30,50,.12);
+  }
+}
+/* explicit theme stamps beat the media query in both directions */
+:root[data-theme="dark"] {
+  --g-bg: #0c1017; --g-surface: #141b2a; --g-surface-2: #182133; --g-line: #26324a;
+  --g-ink: #eef2f8; --g-ink-dim: #9fb0c6; --g-ink-faint: #6d7e96;
+  --g-accent: #a3e635; --g-accent-ink: #16210a;
+  --g-info: #8ab4ff; --g-good: #7ee787; --g-warn: #ffd166; --g-alarm: #ff5a6a;
+}
+:root[data-theme="light"] {
+  --g-bg: #f4f6fb; --g-surface: #ffffff; --g-surface-2: #f7f9ff; --g-line: #dde3ef;
+  --g-ink: #16202f; --g-ink-dim: #48566b; --g-ink-faint: #75839a;
+  --g-accent: #4d7c0f; --g-accent-ink: #f7fee7;
+  --g-info: #2563eb; --g-good: #15803d; --g-warn: #a16207; --g-alarm: #dc2626;
+}
